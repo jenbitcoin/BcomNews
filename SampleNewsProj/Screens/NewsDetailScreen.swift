@@ -26,18 +26,30 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                 ProgressView("Loading")
             case .screen:
                 if let news = viewModel.news {
-                    WebScreen(htmlString: news.content)
-                        .navigationTitle(news.title)
-                        .navigationBarTitleDisplayMode(.inline)
+                    VStack {
+                        Text(news.title)
+                            .foregroundStyle(.black)
+                            .multilineTextAlignment(.leading)
+                            .font(.system(size: 20, weight: .bold))
+                        
+                        AsyncImage(url: URL(string: news.thumbnailURLString)) { image in
+                            image.image?
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                         }
+                        
+                        WebScreen(htmlString: news.content)
+                            .navigationTitle(news.title)
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
                 }
             case .error:
                 Text("Something went wrong")
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .onAppear {
             viewModel.fetchNewsDetail()
         }
-       
+        .navigationTitle("News")
     }
 }

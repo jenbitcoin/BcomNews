@@ -7,24 +7,13 @@
 
 import Foundation
 
-public struct AdjacentNews: Codable {
-    public struct News: Codable {
-        public let id: Int
-        public let name: String
-        public let slug: String
-    }
-    
-    public let prev: AdjacentNews.News
-    public let Next: AdjacentNews.News
-}
-
 public struct NewsJSON: Codable {
-    public let id: Int
-    public let date: String
     public let title: String
-    public let slug: String
     public let content: String
-    public let adjacent_posts: AdjacentNews
+    public let meta_title: String
+    public let meta_description: String
+    public let barker_title: String
+    public let late_barker_title: String
 }
 
 public struct NewsAuthor: Codable {

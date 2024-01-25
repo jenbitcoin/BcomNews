@@ -24,33 +24,43 @@ struct NewsListScreen<Model>: View where Model: NewsListViewModelProtocol {
                     ForEach(viewModel.posts) { post in
                         Button(action: post.onSelect) {
                             VStack(spacing: 8) {
-                                Group {
-                                    HStack {
-                                        Text(post.title)
-                                            .foregroundStyle(.black)
-                                            .font(.system(size: 14, weight: .bold))
-                                        Spacer()
-                                    }
+                                HStack {
+                                    AsyncImage(url: URL(string: post.imageURLString)) { image in
+                                        image.image?
+                                            .resizable()
+                                            .frame(width: 80, height: 80)
+                                     }
                                     
-                                    HStack {
-                                        Text(post.date)
-                                            .foregroundStyle(.gray)
-                                            .font(.system(size: 12, weight: .semibold))
-                                        Spacer()
+                                    VStack(spacing: 8) {
+                                        HStack {
+                                            Text(post.title)
+                                                .foregroundStyle(.black)
+                                                .multilineTextAlignment(.leading)
+                                                .font(.system(size: 14, weight: .bold))
+                                            Spacer()
+                                        }
+                                        
+                                        HStack {
+                                            Text(post.date)
+                                                .foregroundStyle(.gray)
+                                                .font(.system(size: 12, weight: .semibold))
+                                            Spacer()
+                                        }
+                                        
                                     }
-                                    
-                                    Text(post.excerpt)
-                                        .multilineTextAlignment(.leading)
-                                        .lineLimit(2)
-                                        .font(.system(size: 12))
                                 }
+                                
+                                Text(post.excerpt)
+                                    .multilineTextAlignment(.leading)
+                                    .lineLimit(2)
+                                    .font(.system(size: 12))
                             }
                         }
                     }
                 }
             }
             .navigationDestination(isPresented: $viewModel.showNews) {
-                NewsDetailScreen(viewModel: NewsDetailViewModel(slug: viewModel.selectedPost!,
+                NewsDetailScreen(viewModel: NewsDetailViewModel(newsItem: viewModel.selectedPost!,
                                                                 apiClient: NewsAPIClient.shared))
             }
         }

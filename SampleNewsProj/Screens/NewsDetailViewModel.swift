@@ -18,6 +18,7 @@ enum ScreenState {
 struct NewsDisplay {
     let title: String
     let content: String
+    let thumbnailURLString: String
 }
 
 protocol NewsDetailViewModelProtocol: ObservableObject {
@@ -28,7 +29,7 @@ protocol NewsDetailViewModelProtocol: ObservableObject {
 
 class NewsDetailViewModel: NewsDetailViewModelProtocol {
     private let newsAPI: NewsAPIClientProtocol
-    private var slug: String
+    private var newsItem: NewsListItem
     
     @Published var state: ScreenState = .loading {
         didSet {
@@ -38,9 +39,9 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
     
     var news: NewsDisplay?
     
-    init(slug: String,
+    init(newsItem: NewsListItem,
          apiClient: NewsAPIClientProtocol) {
-        self.slug = slug
+        self.newsItem = newsItem
         self.newsAPI = apiClient
         
         setupSDK()
@@ -53,7 +54,7 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
     }
     
     func fetchNewsDetail() {
-        newsAPI.getPostBy(slug: self.slug) { [weak self] response in
+        newsAPI.getPostBy(slug: self.newsItem.slug) { [weak self] response in
             DispatchQueue.main.async {
                 guard let self else {
                     return
@@ -61,7 +62,9 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
                 switch response {
                 case .success(let value):
                     debugPrint(value.content)
-                    self.news = NewsDisplay(title: value.title, content: value.content)
+                    self.news = NewsDisplay(title: value.title,
+                                            content: value.content,
+                                            thumbnailURLString: self.newsItem.thumbnail.featured_image)
                     self.state = .screen
                 case .failure(let error):
                     debugPrint("error: ", error.debugDescription(), error.errorDescription())

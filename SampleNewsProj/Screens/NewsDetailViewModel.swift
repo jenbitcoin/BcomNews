@@ -19,6 +19,12 @@ struct NewsDisplay {
     let title: String
     let content: String
     let thumbnailURLString: String
+    let author: Author
+    
+    struct Author {
+        let avatarURLString: String
+        let name: String
+    }
 }
 
 protocol NewsDetailViewModelProtocol: ObservableObject {
@@ -64,7 +70,9 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
                     debugPrint(value.content)
                     self.news = NewsDisplay(title: value.title,
                                             content: value.content,
-                                            thumbnailURLString: self.newsItem.thumbnail.featured_image)
+                                            thumbnailURLString: self.newsItem.thumbnail.featured_image,
+                                            author: NewsDisplay.Author(avatarURLString: self.newsItem.author.avatar,
+                                                                       name: self.newsItem.author.name))
                     self.state = .screen
                 case .failure(let error):
                     debugPrint("error: ", error.debugDescription(), error.errorDescription())

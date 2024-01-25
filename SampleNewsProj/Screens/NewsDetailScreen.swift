@@ -32,17 +32,41 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                 if let news = viewModel.news {
                     GeometryReader { reader in
                         ScrollView {
-                            VStack {
-                                Text(news.title)
-                                    .foregroundStyle(.black)
-                                    .multilineTextAlignment(.leading)
-                                    .font(.system(size: 20, weight: .bold))
+                            VStack(spacing: 24) {
                                 
                                 AsyncImage(url: URL(string: news.thumbnailURLString)) { image in
                                     image.image?
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                  }
+                                
+                                Text(news.title)
+                                    .foregroundStyle(.black)
+                                    .multilineTextAlignment(.leading)
+                                    .font(.system(size: 26, weight: .bold))
+                                
+                                HStack {
+                                    AsyncImage(url: URL(string: news.author.avatarURLString)) { image in
+                                        image.image?
+                                            .resizable()
+                                            .frame(width: 40, height: 40)
+                                            .aspectRatio(contentMode: .fill)
+                                     }
+                                    
+                                    Text("By ")
+                                        .foregroundStyle(.gray)
+                                        .multilineTextAlignment(.leading)
+                                        .font(.system(size: 14, weight: .regular))
+
+                                    Text(news.author.name)
+                                        .foregroundStyle(.black)
+                                        .multilineTextAlignment(.leading)
+                                        .font(.system(size: 14, weight: .regular))
+                                    
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 16)
+                                
                                 
                                 WebScreen(htmlString: news.content, webViewHeight: $webViewHeight)
                                     .frame(width: reader.size.width, height: max(reader.size.height, self.webViewHeight))

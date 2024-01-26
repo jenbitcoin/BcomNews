@@ -14,6 +14,18 @@ public struct NewsJSON: Codable {
     public let meta_description: String
     public let barker_title: String
     public let late_barker_title: String
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = try container.decode(String.self, forKey: .title)
+        let rawContent = try container.decode(String.self, forKey: .content)
+        
+        self.content = rawContent.removingSubranges(startChar: "[", endChar: "]")
+        self.meta_title = try container.decode(String.self, forKey: .meta_title)
+        self.meta_description = try container.decode(String.self, forKey: .meta_description)
+        self.barker_title = try container.decode(String.self, forKey: .barker_title)
+        self.late_barker_title = try container.decode(String.self, forKey: .late_barker_title)
+    }
 }
 
 public struct NewsAuthor: Codable {

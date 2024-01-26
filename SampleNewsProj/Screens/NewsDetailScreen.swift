@@ -95,16 +95,15 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                             
                             WebScreen(htmlString: news.content, webViewHeight: $webViewHeight)
                                 .frame(width: reader.size.width - 32, height: max(reader.size.height, self.webViewHeight))
-                                .edgesIgnoringSafeArea(.bottom)
                                 .navigationTitle(news.title)
                                 .navigationBarTitleDisplayMode(.inline)
                             
                             authorInfoView
-                                .background(Color.gray.opacity(0.3))
-
+                                .background(Color(red: 0.96, green: 0.96, blue: 0.97))
                         }
                         .padding(.horizontal, 16)
 
+                        relatedStoriesView
                     }
                 }
             }
@@ -123,28 +122,10 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                             .aspectRatio(contentMode: .fill)
                      }
 
-                    VStack(spacing: 8) {
-                        HStack {
-                            Text(author.name)
-                                .foregroundStyle(.black)
-                                .multilineTextAlignment(.leading)
-                                .font(.system(size: 18, weight: .bold))
-                            
-                            Spacer()
-                        }
-                        
-                        HStack(spacing: 12) {
-                            Circle()
-                                .foregroundColor(.black)
-                                .frame(width: 32, height: 32)
-                            
-                            Circle()
-                                .foregroundColor(.black)
-                                .frame(width: 32, height: 32)
-                            
-                            Spacer()
-                        }
-                    }
+                    Text(author.name)
+                        .foregroundStyle(.black)
+                        .multilineTextAlignment(.leading)
+                        .font(.system(size: 18, weight: .bold))
                     
                     Spacer()
                 }
@@ -156,6 +137,58 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
         }
+    }
+    
+    private var relatedStoriesView: some View {
+        ZStack {
+            VStack {
+                HStack {
+                    Text("Related Stories")
+                        .foregroundStyle(.black)
+                        .font(.system(size: 18, weight: .bold))
+                    
+                    Spacer()
+                }
+                
+                ForEach(viewModel.relatedNews) { post in
+                    Button(action: post.onSelect) {
+                        VStack(spacing: 8) {
+                            HStack {
+                                VStack(spacing: 8) {
+                                    HStack {
+                                        Text(post.title)
+                                            .foregroundStyle(.black)
+                                            .multilineTextAlignment(.leading)
+                                            .font(.system(size: 16, weight: .bold))
+                                        Spacer()
+                                    }
+                                    
+                                    HStack {
+                                        Text(post.date)
+                                            .foregroundStyle(.gray)
+                                            .font(.system(size: 12, weight: .medium))
+                                        Spacer()
+                                    }
+                                    
+                                }
+                                
+                                AsyncImage(url: URL(string: post.imageURLString)) { image in
+                                    image.image?
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+                                 }
+                            }
+                        }
+                    }
+                    .padding(.vertical, 8)
+                    
+                    Divider()
+                }
+            }
+            .padding(.horizontal, 16)
+        }
+        .background(Color(red: 0.96, green: 0.96, blue: 0.97))
+
     }
     
     var body: some View {
@@ -174,6 +207,10 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
         .onAppear {
             viewModel.fetchNewsDetail()
         }
-        .navigationTitle("News")
+        .navigationDestination(isPresented: $viewModel.showNews) {
+            NewsDetailScreen(viewModel: NewsDetailViewModel(newsItem: viewModel.selectedPost!,
+                                                            otherNews: viewModel.rawNewsListItem,
+                                                            apiClient: NewsAPIClient.shared) as! Model)
+        }
     }
 }

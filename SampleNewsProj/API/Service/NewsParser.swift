@@ -23,8 +23,19 @@ public struct NewsJSON: Codable {
         self.content = rawContent.removingSubranges(startChar: "[", endChar: "]")
         self.meta_title = try container.decode(String.self, forKey: .meta_title)
         self.meta_description = try container.decode(String.self, forKey: .meta_description)
-        self.barker_title = try container.decode(String.self, forKey: .barker_title)
-        self.late_barker_title = try container.decode(String.self, forKey: .late_barker_title)
+        
+        if let barkerTitle = try? container.decode(String.self, forKey: .barker_title) {
+            self.barker_title = barkerTitle
+        } else {
+            self.barker_title = ""
+        }
+        
+        if let lateBarkerTitle = try? container.decode(String.self, forKey: .late_barker_title) {
+            self.late_barker_title = lateBarkerTitle
+        } else {
+            self.late_barker_title = ""
+        }
+        
     }
 }
 

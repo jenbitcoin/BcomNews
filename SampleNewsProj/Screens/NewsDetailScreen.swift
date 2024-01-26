@@ -104,6 +104,8 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                         .padding(.horizontal, 16)
 
                         relatedStoriesView
+                        
+                        previousOrNextStoriesView
                     }
                 }
             }
@@ -189,6 +191,82 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
         }
         .background(Color(red: 0.96, green: 0.96, blue: 0.97))
 
+    }
+    
+    private var previousOrNextStoriesView: some View {
+        ZStack {
+            VStack(spacing: 16) {
+                HStack {
+                    Text("Don’t stop your journey in crypto")
+                        .foregroundStyle(.black)
+                        .font(.system(size: 18, weight: .bold))
+                    
+                    Spacer()
+                }
+                
+                HStack(spacing: 16) {
+                    ForEach(0..<2) { i in
+                        let post = viewModel.relatedNews[i]
+                        
+                        ZStack {
+                            Button(action: post.onSelect) {
+                                VStack(spacing: 8) {
+                                    Group {
+                                        if i == 0 {
+                                            HStack(spacing: 8) {
+                                                Image(systemName: "arrow.left")
+                                                    .tint(Color.black)
+                                                
+                                                Text("Previous story")
+                                                    .foregroundStyle(.black)
+                                                    .font(.system(size: 14, weight: .bold))
+                                                
+                                                 Spacer()
+                                            }
+                                        } else {
+                                            HStack(spacing: 8) {
+                                                Spacer()
+                                                
+                                                Text("Next story")
+                                                    .foregroundStyle(.black)
+                                                    .font(.system(size: 14, weight: .bold))
+                                                
+                                                Image(systemName: "arrow.right")
+                                                    .tint(Color.black)
+                                            }
+                                        }
+                                    }
+                                    .padding(.vertical, 8)
+                                    
+                                    AsyncImage(url: URL(string: post.imageURLString)) { image in
+                                        image.image?
+                                            .resizable()
+                                            .frame(height: 80)
+                                     }
+                                    
+                                    Text(post.title)
+                                        .foregroundStyle(.black)
+                                        .multilineTextAlignment(.leading)
+                                        .font(.system(size: 14, weight: .bold))
+                                    
+                                    HStack {
+                                        Text(post.date)
+                                            .foregroundStyle(.gray)
+                                            .font(.system(size: 12, weight: .medium))
+                                        Spacer()
+                                    }
+                                    
+                                    Spacer()
+                                }
+                            }
+                            .padding(.horizontal, 8)
+                        }
+                        .background(Color(red: 0.96, green: 0.96, blue: 0.97))
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+        }
     }
     
     var body: some View {

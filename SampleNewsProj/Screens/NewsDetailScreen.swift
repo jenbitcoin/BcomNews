@@ -99,7 +99,7 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                                 .navigationBarTitleDisplayMode(.inline)
                             
                             authorInfoView
-                                .background(Color(red: 0.96, green: 0.96, blue: 0.97))
+                                .background(Color(red: 0.91, green: 0.92, blue: 0.92))
                         }
                         .padding(.horizontal, 16)
 
@@ -181,6 +181,7 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                                     image.image?
                                         .resizable()
                                         .frame(width: 80, height: 80)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
                                  }
                             }
                         }
@@ -192,7 +193,6 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
             }
             .padding(.horizontal, 16)
         }
-        .background(Color(red: 0.96, green: 0.96, blue: 0.97))
 
     }
     
@@ -245,6 +245,7 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                                         image.image?
                                             .resizable()
                                             .frame(height: 80)
+                                            .clipShape(RoundedRectangle(cornerRadius: 12))
                                      }
                                     
                                     Text(post.title)
@@ -264,12 +265,14 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                             }
                             .padding(.horizontal, 8)
                         }
-                        .background(Color(red: 0.96, green: 0.96, blue: 0.97))
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
                 }
             }
             .padding(.horizontal, 16)
         }
+
     }
     
     var body: some View {
@@ -279,6 +282,7 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                 ProgressView("Loading")
             case .screen:
                 mainNewsView
+                    .background(Color(red: 0.96, green: 0.96, blue: 0.97))
             case .error:
                 Text("Something went wrong")
             }

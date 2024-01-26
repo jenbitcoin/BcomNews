@@ -11,6 +11,7 @@ import UIKit
 
 protocol NewsListViewModelProtocol: ObservableObject {
     var posts: [NewsListItemDisplay] { get set }
+    var rawPosts: [NewsListItem] { get }
     var selectedPost: NewsListItem? { get }
     var showNews: Bool { get set }
     
@@ -18,7 +19,7 @@ protocol NewsListViewModelProtocol: ObservableObject {
 }
 
 struct NewsListItemDisplay: Identifiable {
-    let id = UUID()
+    let id: Int
     let title: String
     let slug: String
     let imageURLString: String
@@ -32,6 +33,7 @@ class NewsListViewModel: NewsListViewModelProtocol {
     @Published var posts: [NewsListItemDisplay] = []
     @Published var showNews: Bool = false
     var selectedPost: NewsListItem?
+    var rawPosts: [NewsListItem] = []
     
     init(newsAPIClient: NewsAPIClientProtocol) {
         self.newsAPI = newsAPIClient
@@ -49,8 +51,10 @@ class NewsListViewModel: NewsListViewModelProtocol {
             DispatchQueue.main.async {
                 switch response {
                 case .success(let value):
+                    self?.rawPosts = value.posts
+                    
                     self?.posts = value.posts.map({ item in
-                        NewsListItemDisplay(title: item.title, slug: item.slug, imageURLString: item.thumbnail.micro, date: item.date, excerpt: item.excerpt, onSelect: {
+                        NewsListItemDisplay(id: item.id, title: item.title, slug: item.slug, imageURLString: item.thumbnail.micro, date: item.date, excerpt: item.excerpt, onSelect: {
                             debugPrint("Show News details of: ", item.slug)
                             self?.selectedPost = item
                             self?.showNews = true

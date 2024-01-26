@@ -61,10 +61,10 @@ struct NewsListScreen<Model>: View where Model: NewsListViewModelProtocol {
             }
             .navigationDestination(isPresented: $viewModel.showNews) {
                 NewsDetailScreen(viewModel: NewsDetailViewModel(newsItem: viewModel.selectedPost!,
+                                                                otherNews: viewModel.rawPosts,
                                                                 apiClient: NewsAPIClient.shared))
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .onAppear {
             viewModel.fetchLatestNews()
         }

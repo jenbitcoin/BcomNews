@@ -28,16 +28,32 @@ struct NewsDisplay {
     }
 }
 
+struct RelatedNewsListItemDisplay: Identifiable {
+    let id: Int
+    let title: String
+    let slug: String
+    let imageURLString: String
+    let date: String
+    var onSelect: (() -> ())
+}
+
 protocol NewsDetailViewModelProtocol: ObservableObject {
     var state: ScreenState { get set }
     var news: NewsDisplay? { get set }
+    var selectedPost: NewsListItem? { get set }
+    var relatedNews: [RelatedNewsListItemDisplay] { get set }
+    var rawNewsListItem: [NewsListItem] { get }
+    var showNews: Bool { get set }
     func fetchNewsDetail()
 }
 
 class NewsDetailViewModel: NewsDetailViewModelProtocol {
     private let newsAPI: NewsAPIClientProtocol
     private var newsItem: NewsListItem
-    
+    var selectedPost: NewsListItem?
+    var rawNewsListItem: [NewsListItem] = []
+    @Published var showNews: Bool = false
+
     @Published var state: ScreenState = .loading {
         didSet {
             debugPrint("did set")
@@ -45,11 +61,27 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
     }
     
     var news: NewsDisplay?
+    var relatedNews: [RelatedNewsListItemDisplay] = []
     
     init(newsItem: NewsListItem,
+         otherNews: [NewsListItem],
          apiClient: NewsAPIClientProtocol) {
         self.newsItem = newsItem
         self.newsAPI = apiClient
+        self.rawNewsListItem = otherNews
+        
+        self.relatedNews = otherNews
+            .filter({ $0.id != newsItem.id })
+            .map({ item in
+            RelatedNewsListItemDisplay(id: item.id,
+                                       title: item.title,
+                                       slug: item.slug,
+                                       imageURLString: item.thumbnail.micro,
+                                       date: item.date) {
+                self.selectedPost = item
+                self.showNews = true
+            }
+        })
         
         setupSDK()
     }

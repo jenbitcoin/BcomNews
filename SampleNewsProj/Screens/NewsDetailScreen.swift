@@ -106,6 +106,9 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                         relatedStoriesView
                         
                         previousOrNextStoriesView
+                        
+                        Spacer()
+                            .frame(height: 100)
                     }
                 }
             }

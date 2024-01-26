@@ -44,6 +44,7 @@ struct WebViewRepresentable: UIViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             webView.evaluateJavaScript("document.readyState") { complete, _ in
                 guard complete != nil else { return }
+                
                 webView.evaluateJavaScript("document.body.scrollHeight") { height, _ in
                     guard let height = height as? CGFloat else { return }
 

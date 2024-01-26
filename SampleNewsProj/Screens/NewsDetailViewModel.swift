@@ -24,6 +24,7 @@ struct NewsDisplay {
     struct Author {
         let avatarURLString: String
         let name: String
+        let info: String
     }
 }
 
@@ -72,7 +73,8 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
                                             content: value.content,
                                             thumbnailURLString: self.newsItem.thumbnail.featured_image,
                                             author: NewsDisplay.Author(avatarURLString: self.newsItem.author.avatar,
-                                                                       name: self.newsItem.author.name))
+                                                                       name: self.newsItem.author.name, 
+                                                                       info: self.newsItem.author.info))
                     self.state = .screen
                 case .failure(let error):
                     debugPrint("error: ", error.debugDescription(), error.errorDescription())

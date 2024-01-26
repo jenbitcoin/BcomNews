@@ -98,12 +98,63 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                                 .edgesIgnoringSafeArea(.bottom)
                                 .navigationTitle(news.title)
                                 .navigationBarTitleDisplayMode(.inline)
+                            
+                            authorInfoView
+                                .background(Color.gray.opacity(0.3))
+
                         }
                         .padding(.horizontal, 16)
 
                     }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var authorInfoView: some View {
+        if let author = viewModel.news?.author {
+            VStack(spacing: 16) {
+                HStack(spacing: 16) {
+                    AsyncImage(url: URL(string: author.avatarURLString)) { image in
+                        image.image?
+                            .resizable()
+                            .frame(width: 64, height: 64)
+                            .aspectRatio(contentMode: .fill)
+                     }
+
+                    VStack(spacing: 8) {
+                        HStack {
+                            Text(author.name)
+                                .foregroundStyle(.black)
+                                .multilineTextAlignment(.leading)
+                                .font(.system(size: 18, weight: .bold))
+                            
+                            Spacer()
+                        }
+                        
+                        HStack(spacing: 12) {
+                            Circle()
+                                .foregroundColor(.black)
+                                .frame(width: 32, height: 32)
+                            
+                            Circle()
+                                .foregroundColor(.black)
+                                .frame(width: 32, height: 32)
+                            
+                            Spacer()
+                        }
+                    }
+                    
+                    Spacer()
+                }
+                
+                Text(author.info)
+                    .multilineTextAlignment(.leading)
+                    .font(Font.custom("SF Pro Display", size: 16))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
         }
     }
     

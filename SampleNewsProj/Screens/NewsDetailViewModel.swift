@@ -40,19 +40,15 @@ struct RelatedNewsListItemDisplay: Identifiable {
 protocol NewsDetailViewModelProtocol: ObservableObject {
     var state: ScreenState { get set }
     var news: NewsDisplay? { get set }
-    var selectedPost: NewsListItem? { get set }
     var relatedNews: [RelatedNewsListItemDisplay] { get set }
     var rawNewsListItem: [NewsListItem] { get }
-    var showNews: Bool { get set }
     func fetchNewsDetail()
 }
 
 class NewsDetailViewModel: NewsDetailViewModelProtocol {
     private let newsAPI: NewsAPIClientProtocol
     private var newsItem: NewsListItem
-    var selectedPost: NewsListItem?
     var rawNewsListItem: [NewsListItem] = []
-    @Published var showNews: Bool = false
 
     @Published var state: ScreenState = .loading {
         didSet {
@@ -78,8 +74,8 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
                                        slug: item.slug,
                                        imageURLString: item.thumbnail.micro,
                                        date: item.date) {
-                self.selectedPost = item
-                self.showNews = true
+                self.newsItem = item
+                self.fetchNewsDetail()
             }
         })
         
@@ -93,6 +89,8 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
     }
     
     func fetchNewsDetail() {
+        self.state = .loading
+        
         newsAPI.getPostBy(slug: self.newsItem.slug) { [weak self] response in
             DispatchQueue.main.async {
                 guard let self else {

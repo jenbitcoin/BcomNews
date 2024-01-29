@@ -292,10 +292,5 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
         .onAppear {
             viewModel.fetchNewsDetail()
         }
-        .navigationDestination(isPresented: $viewModel.showNews) {
-            NewsDetailScreen(viewModel: NewsDetailViewModel(newsItem: viewModel.selectedPost!,
-                                                            otherNews: viewModel.rawNewsListItem,
-                                                            apiClient: NewsAPIClient.shared) as! Model)
-        }
     }
 }

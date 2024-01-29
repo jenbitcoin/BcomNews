@@ -61,6 +61,8 @@ struct WebViewRepresentable: UIViewRepresentable {
             let request = URLRequest(url: url)
             wkWebView.load(request)
         }
+        
+        wkWebView.configuration.userContentController.removeAllUserScripts()
     }
 
     func makeCoordinator() -> Coordinator {

@@ -29,6 +29,7 @@
 		6434162A2B61193900521D5C /* SwiftHTMLtoMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 643416292B61193900521D5C /* SwiftHTMLtoMarkdown */; };
 		644D98212B637BAB00EA63DB /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 644D98202B637BAB00EA63DB /* String+Extension.swift */; };
 		644D98242B639C7200EA63DB /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 644D98232B639C7200EA63DB /* GoogleMobileAds */; };
+		64B287232B67930B00A91F02 /* style.css in Resources */ = {isa = PBXBuildFile; fileRef = 64B287222B67930B00A91F02 /* style.css */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		643416212B6118E500521D5C /* NewsListScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsListScreen.swift; sourceTree = "<group>"; };
 		643416222B6118E500521D5C /* NewsDetailScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsDetailScreen.swift; sourceTree = "<group>"; };
 		644D98202B637BAB00EA63DB /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		64B287222B67930B00A91F02 /* style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = style.css; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 		643415E22B61184500521D5C /* SampleNewsProj */ = {
 			isa = PBXGroup;
 			children = (
+				64B287222B67930B00A91F02 /* style.css */,
 				6434161D2B6118D400521D5C /* Screens */,
 				6434160F2B61189E00521D5C /* AppConfig.swift */,
 				6434160D2B61186900521D5C /* API */,
@@ -315,6 +318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				643415EB2B61184600521D5C /* Preview Assets.xcassets in Resources */,
+				64B287232B67930B00A91F02 /* style.css in Resources */,
 				643415E82B61184600521D5C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

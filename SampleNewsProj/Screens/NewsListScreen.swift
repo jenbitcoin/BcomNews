@@ -67,6 +67,7 @@ struct NewsListScreen<Model>: View where Model: NewsListViewModelProtocol {
         }
         .onAppear {
             viewModel.fetchLatestNews()
+            viewModel.onAppear()
         }
         
     }

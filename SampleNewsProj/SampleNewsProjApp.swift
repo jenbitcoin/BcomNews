@@ -9,7 +9,8 @@ import SwiftUI
 
 @main
 struct SampleNewsProjApp: App {
-    private let viewModel = NewsListViewModel(newsAPIClient: NewsAPIClient.shared)
+    private let viewModel = NewsListViewModel(newsAPIClient: NewsAPIClient.shared,
+                                              adsManager: AdsManager())
     
     init() {
         setupSDK()

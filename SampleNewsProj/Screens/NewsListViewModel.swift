@@ -16,6 +16,7 @@ protocol NewsListViewModelProtocol: ObservableObject {
     var showNews: Bool { get set }
     
     func fetchLatestNews()
+    func onAppear()
 }
 
 struct NewsListItemDisplay: Identifiable {
@@ -34,9 +35,11 @@ class NewsListViewModel: NewsListViewModelProtocol {
     @Published var showNews: Bool = false
     var selectedPost: NewsListItem?
     var rawPosts: [NewsListItem] = []
+    var adsManager: AdsManager
             
-    init(newsAPIClient: NewsAPIClientProtocol) {
+    init(newsAPIClient: NewsAPIClientProtocol, adsManager: AdsManager) {
         self.newsAPI = newsAPIClient
+        self.adsManager = adsManager
     }
  
     func fetchLatestNews() {
@@ -59,5 +62,15 @@ class NewsListViewModel: NewsListViewModelProtocol {
                 }
             }
         }
+    }
+    
+    func onAppear() {
+        self.adsManager.initializeAdBanner()
+    }
+}
+
+extension NewsListViewModel: AdsDelegate {
+    func showAds(with adsView: UIView) {
+        debugPrint("NewsList VM")
     }
 }

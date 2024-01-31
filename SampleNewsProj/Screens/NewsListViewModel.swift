@@ -11,11 +11,15 @@ import UIKit
 
 protocol NewsListViewModelProtocol: ObservableObject {
     var posts: [NewsListItemDisplay] { get set }
+    var banner: AdBannerRepresentable? { get set }
+
     var rawPosts: [NewsListItem] { get }
     var selectedPost: NewsListItem? { get }
     var showNews: Bool { get set }
     
     func fetchLatestNews()
+    func setupAdsViewController(_ vc: UIViewController)
+    func loadBanner()
 }
 
 struct NewsListItemDisplay: Identifiable {
@@ -30,14 +34,27 @@ struct NewsListItemDisplay: Identifiable {
 
 class NewsListViewModel: NewsListViewModelProtocol {
     private let newsAPI: NewsAPIClientProtocol
+    
+    @Published var banner: AdBannerRepresentable?
     @Published var posts: [NewsListItemDisplay] = []
     @Published var showNews: Bool = false
     var selectedPost: NewsListItem?
     var rawPosts: [NewsListItem] = []
+    var adsManager: AdsManager?
             
     init(newsAPIClient: NewsAPIClientProtocol) {
         self.newsAPI = newsAPIClient
     }
+    
+    func setupAdsViewController(_ vc: UIViewController) {
+        adsManager = AdsManager(rootViewController: vc)
+        adsManager?.initializeAdBanner(showAdsDelegate: self)
+    }
+    
+    func loadBanner() {
+        adsManager?.loadAdsBanner()
+    }
+    
  
     func fetchLatestNews() {
         newsAPI.getLatestPosts(perPage: 5) { [weak self] response in
@@ -59,5 +76,11 @@ class NewsListViewModel: NewsListViewModelProtocol {
                 }
             }
         }
+    }
+}
+
+extension NewsListViewModel: AdsDelegate {
+    func addAdsToView(with banner: AdBannerRepresentable) {
+        self.banner = banner
     }
 }

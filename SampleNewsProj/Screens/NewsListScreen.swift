@@ -58,15 +58,21 @@ struct NewsListScreen<Model>: View where Model: NewsListViewModelProtocol {
                         }
                     }
                 }
+                
+                if let banner = viewModel.banner {
+                    banner
+                }
             }
             .navigationDestination(isPresented: $viewModel.showNews) {
                 NewsDetailScreen(viewModel: NewsDetailViewModel(newsItem: viewModel.selectedPost!,
                                                                 otherNews: viewModel.rawPosts,
                                                                 apiClient: NewsAPIClient.shared))
-            }
+            }            
         }
         .onAppear {
             viewModel.fetchLatestNews()
+            viewModel.setupAdsViewController(UIHostingController(rootView: self))
+            viewModel.loadBanner()
         }
         
     }

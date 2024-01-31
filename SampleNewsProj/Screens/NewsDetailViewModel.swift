@@ -78,16 +78,8 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
                 self.fetchNewsDetail()
             }
         })
-        
-        setupSDK()
     }
-    
-    private func setupSDK() {
-        SDKConfiguration.shared.api = SDKAPIData(rootScheme: AppConfig.apiRootScheme,
-                                                 rootHost: AppConfig.apiRootHost,
-                                                 serverHost: AppConfig.apiServerHost)
-    }
-    
+
     func fetchNewsDetail() {
         self.state = .loading
         

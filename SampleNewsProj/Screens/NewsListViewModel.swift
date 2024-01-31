@@ -34,16 +34,9 @@ class NewsListViewModel: NewsListViewModelProtocol {
     @Published var showNews: Bool = false
     var selectedPost: NewsListItem?
     var rawPosts: [NewsListItem] = []
-    
+            
     init(newsAPIClient: NewsAPIClientProtocol) {
         self.newsAPI = newsAPIClient
-        setupSDK()
-    }
-    
-    private func setupSDK() {
-        SDKConfiguration.shared.api = SDKAPIData(rootScheme: AppConfig.apiRootScheme,
-                                                 rootHost: AppConfig.apiRootHost,
-                                                 serverHost: AppConfig.apiServerHost)
     }
  
     func fetchLatestNews() {
@@ -68,4 +61,3 @@ class NewsListViewModel: NewsListViewModelProtocol {
         }
     }
 }
-

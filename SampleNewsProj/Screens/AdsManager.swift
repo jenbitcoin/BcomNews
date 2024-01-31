@@ -8,13 +8,13 @@
 import Foundation
 import GoogleMobileAds
 
-protocol AdsDelegate: AnyObject {
-    func showAds(with adsView: UIView)
-}
-
 final class AdsManager: NSObject {
     private var bannerView: GADBannerView!
-    private weak var adsDelegate: AdsDelegate?
+    private var rootViewController: UIViewController
+        
+    init(rootViewController: UIViewController) {
+        self.rootViewController = rootViewController
+    }
 
     static func initializeGoogleAds() {
         GADMobileAds.sharedInstance().start { status in
@@ -25,15 +25,41 @@ final class AdsManager: NSObject {
     func initializeAdBanner() {
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         bannerView.adUnitID = "ca-app-pub-4413360973090930/2566205549"
-        bannerView.delegate = self
+        bannerView.rootViewController = self.rootViewController
         bannerView.load(GADRequest())
+    }
+    
+    private func addBannerViewToView(_ bannerView: GADBannerView) {
+        guard let view = self.rootViewController.view else {
+            return
+        }
+        
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(bannerView)
+        view.addConstraints(
+              [NSLayoutConstraint(item: bannerView,
+                                  attribute: .bottom,
+                                  relatedBy: .equal,
+                                  toItem: view.safeAreaLayoutGuide,
+                                  attribute: .bottom,
+                                  multiplier: 1,
+                                  constant: 0),
+               NSLayoutConstraint(item: bannerView,
+                                  attribute: .centerX,
+                                  relatedBy: .equal,
+                                  toItem: view,
+                                  attribute: .centerX,
+                                  multiplier: 1,
+                                  constant: 0)
+              ])
     }
 }
 
 extension AdsManager: GADBannerViewDelegate {
     func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
       print("bannerViewDidReceiveAd")
-        adsDelegate?.showAds(with: bannerView)
+        addBannerViewToView(bannerView)
     }
 
     func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {

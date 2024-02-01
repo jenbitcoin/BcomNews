@@ -19,7 +19,6 @@ protocol NewsListViewModelProtocol: ObservableObject {
     
     func fetchLatestNews()
     func setupAdsViewController(_ vc: UIViewController)
-    func loadBanner()
 }
 
 struct NewsListItemDisplay: Identifiable {
@@ -48,13 +47,8 @@ class NewsListViewModel: NewsListViewModelProtocol {
     
     func setupAdsViewController(_ vc: UIViewController) {
         adsManager = AdsManager(rootViewController: vc)
-        adsManager?.initializeAdBanner(showAdsDelegate: self)
+        adsManager?.showAdBanner(showAdsDelegate: self)
     }
-    
-    func loadBanner() {
-        adsManager?.loadAdsBanner()
-    }
-    
  
     func fetchLatestNews() {
         newsAPI.getLatestPosts(perPage: 5) { [weak self] response in

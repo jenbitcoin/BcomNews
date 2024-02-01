@@ -28,15 +28,12 @@ final class AdsManager: NSObject {
         }
     }
 
-    func initializeAdBanner(showAdsDelegate: AdsDelegate) {
+    func showAdBanner(showAdsDelegate: AdsDelegate) {
         bannerView = GADBannerView(adSize: GADAdSizeBanner)
         bannerView.adUnitID = "ca-app-pub-4413360973090930/2566205549"
         bannerView.rootViewController = self.rootViewController
         bannerView.delegate = self
         self.showAdsDelegate = showAdsDelegate
-    }
-    
-    func loadAdsBanner() {
         bannerView.load(GADRequest())
     }
 }
@@ -71,41 +68,24 @@ extension AdsManager: GADBannerViewDelegate {
 struct AdBannerRepresentable: UIViewRepresentable {
     var bannerView: GADBannerView
     func makeUIView(context: UIViewRepresentableContext<AdBannerRepresentable>) -> UIView {
-        let view = UIView(frame: CGRect(x: 0,
-                                        y: UIScreen.main.bounds.height-50,
-                                        width: UIScreen.main.bounds.width,
-                                        height: 50))
+        let view = UIView()
         view.backgroundColor = UIColor.white
         bannerView.translatesAutoresizingMaskIntoConstraints = false
 
         view.addSubview(bannerView)
         view.addConstraints(
               [NSLayoutConstraint(item: bannerView,
-                                  attribute: .bottom,
+                                  attribute: .top,
                                   relatedBy: .equal,
                                   toItem: view.safeAreaLayoutGuide,
-                                  attribute: .bottom,
+                                  attribute: .top,
                                   multiplier: 1,
                                   constant: 0),
-               NSLayoutConstraint(item: bannerView,
-                                   attribute: .top,
-                                   relatedBy: .equal,
-                                   toItem: view,
-                                   attribute: .top,
-                                   multiplier: 1,
-                                   constant: 0),
                NSLayoutConstraint(item: bannerView,
                                   attribute: .centerX,
                                   relatedBy: .equal,
                                   toItem: view,
                                   attribute: .centerX,
-                                  multiplier: 1,
-                                  constant: 0),
-               NSLayoutConstraint(item: bannerView,
-                                  attribute: .height,
-                                  relatedBy: .equal,
-                                  toItem: view,
-                                  attribute: .height,
                                   multiplier: 1,
                                   constant: 0)
               ])
@@ -113,5 +93,10 @@ struct AdBannerRepresentable: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<AdBannerRepresentable>) {}
+    func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<AdBannerRepresentable>) {
+        uiView.frame = CGRect(x: 0,
+                              y: UIScreen.main.bounds.height-50,
+                              width: UIScreen.main.bounds.width,
+                              height: 50)
+    }
 }

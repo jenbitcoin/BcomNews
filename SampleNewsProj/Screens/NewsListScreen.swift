@@ -72,7 +72,6 @@ struct NewsListScreen<Model>: View where Model: NewsListViewModelProtocol {
         .onAppear {
             viewModel.fetchLatestNews()
             viewModel.setupAdsViewController(UIHostingController(rootView: self))
-            viewModel.loadBanner()
         }
         
     }

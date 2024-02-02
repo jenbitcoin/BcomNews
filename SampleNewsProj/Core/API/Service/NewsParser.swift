@@ -77,4 +77,5 @@ public struct NewsListItem: Codable {
 
 public struct NewsListJSON: Codable {
     public let posts: [NewsListItem]
+    public let total: Int
 }

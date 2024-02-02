@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol NewsAPIClientProtocol {
-    func getLatestPosts(perPage: Int, completion: @escaping (APIResponse<(NewsListJSON)>) -> Void)
+    func getLatestPosts(perPage: Int, offset: Int, completion: @escaping (APIResponse<(NewsListJSON)>) -> Void)
     func getPostBy(slug: String, completion: @escaping (APIResponse<(NewsJSON)>) -> Void)
 }
 
@@ -18,11 +18,12 @@ public class NewsAPIClient: APIClient, NewsAPIClientProtocol {
     
     private override init() {}
 
-    public func getLatestPosts(perPage: Int, completion: @escaping (APIResponse<(NewsListJSON)>) -> Void) {
+    public func getLatestPosts(perPage: Int, offset: Int, completion: @escaping (APIResponse<(NewsListJSON)>) -> Void) {
         let urlString = "posts"
         
         let queryItems = [
-            URLQueryItem(name: "per_page", value: "\(perPage)")
+            URLQueryItem(name: "per_page", value: "\(perPage)"),
+            URLQueryItem(name: "offset", value: "\(offset)")
         ]
         let url = APIClient.apiUrlFromPath(format: urlString, queryItems)
         self.request(url: url, completion: completion, parse: self.parseNewsListJSON)

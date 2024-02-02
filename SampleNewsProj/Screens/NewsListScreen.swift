@@ -28,6 +28,7 @@ struct NewsListScreen<Model>: View where Model: NewsListViewModelProtocol {
                                     AsyncImage(url: URL(string: post.imageURLString)) { image in
                                         image.image?
                                             .resizable()
+                                            .aspectRatio(contentMode: .fit)
                                             .frame(width: 80, height: 80)
                                      }
                                     
@@ -61,6 +62,7 @@ struct NewsListScreen<Model>: View where Model: NewsListViewModelProtocol {
                 
                 if let banner = viewModel.banner {
                     banner
+                        .frame(height: 50)
                 }
             }
             .navigationDestination(isPresented: $viewModel.showNews) {

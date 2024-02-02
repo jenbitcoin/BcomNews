@@ -40,15 +40,19 @@ struct RelatedNewsListItemDisplay: Identifiable {
 protocol NewsDetailViewModelProtocol: ObservableObject {
     var state: ScreenState { get set }
     var news: NewsDisplay? { get set }
+    var banner: AdBannerRepresentable? { get set }
+
     var relatedNews: [RelatedNewsListItemDisplay] { get set }
     var rawNewsListItem: [NewsListItem] { get }
     func fetchNewsDetail()
+    func setupAdsViewController(_ vc: UIViewController)
 }
 
 class NewsDetailViewModel: NewsDetailViewModelProtocol {
     private let newsAPI: NewsAPIClientProtocol
     private var newsItem: NewsListItem
     var rawNewsListItem: [NewsListItem] = []
+    @Published var banner: AdBannerRepresentable?
 
     @Published var state: ScreenState = .loading {
         didSet {
@@ -58,7 +62,13 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
     
     var news: NewsDisplay?
     var relatedNews: [RelatedNewsListItemDisplay] = []
-    
+    var adsManager: AdsManager?
+            
+    func setupAdsViewController(_ vc: UIViewController) {
+        adsManager = AdsManager(rootViewController: vc)
+        adsManager?.showAdBanner(showAdsDelegate: self)
+    }
+
     init(newsItem: NewsListItem,
          otherNews: [NewsListItem],
          apiClient: NewsAPIClientProtocol) {
@@ -105,5 +115,11 @@ class NewsDetailViewModel: NewsDetailViewModelProtocol {
             }
             
         }
+    }
+}
+
+extension NewsDetailViewModel: AdsDelegate {
+    func addAdsToView(with banner: AdBannerRepresentable) {
+        self.banner = banner
     }
 }

@@ -58,7 +58,7 @@ class NewsListViewModel: NewsListViewModelProtocol {
                     self?.rawPosts = value.posts
                     
                     self?.posts = value.posts.map({ item in
-                        NewsListItemDisplay(id: item.id, title: item.title, slug: item.slug, imageURLString: item.thumbnail.micro, date: item.date, excerpt: item.excerpt, onSelect: {
+                        NewsListItemDisplay(id: item.id, title: item.title, slug: item.slug, imageURLString: item.thumbnail.nano, date: item.date, excerpt: item.excerpt, onSelect: {
                             debugPrint("Show News details of: ", item.slug)
                             self?.selectedPost = item
                             self?.showNews = true

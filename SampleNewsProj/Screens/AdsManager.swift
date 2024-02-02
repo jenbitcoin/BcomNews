@@ -94,9 +94,6 @@ struct AdBannerRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: UIViewRepresentableContext<AdBannerRepresentable>) {
-        uiView.frame = CGRect(x: 0,
-                              y: UIScreen.main.bounds.height-50,
-                              width: UIScreen.main.bounds.width,
-                              height: 50)
+
     }
 }

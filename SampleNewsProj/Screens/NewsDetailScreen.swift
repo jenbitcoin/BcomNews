@@ -51,7 +51,6 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
             .frame(width: 96, height: 40)
             
         }
-        .padding(.bottom, 16)
     }
 
     @ViewBuilder
@@ -103,7 +102,7 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                         }
                         .padding(.horizontal, 16)
 
-                        relatedStoriesView
+                        //relatedStoriesView
                         
                         previousOrNextStoriesView
                         
@@ -287,10 +286,25 @@ struct NewsDetailScreen<Model>: View where Model: NewsDetailViewModelProtocol {
                 Text("Something went wrong")
             }
             
-            floatingButtonsView
+            
+            if let banner = viewModel.banner {
+                VStack(spacing: 8) {
+                    Spacer()
+                    
+                    floatingButtonsView
+
+                    banner
+                        .frame(height: 80)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            } else {
+                floatingButtonsView
+                    .padding(.bottom, 16)
+            }
         }
         .onAppear {
             viewModel.fetchNewsDetail()
+            viewModel.setupAdsViewController(UIHostingController(rootView: self))
         }
     }
 }
